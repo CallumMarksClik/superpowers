@@ -4,6 +4,8 @@ This is [Callum Marks'](https://github.com/CallumMarksClik/superpowers) personal
 
 **Everything in this README describes this fork's behaviour.** Upstream `obra/superpowers` is a different, independently-evolving codebase and may work differently.
 
+> **This is [Callum Marks](https://github.com/CallumMarksClik)'s independent fork** of the original [Superpowers](https://github.com/obra/superpowers) project by Jesse Vincent, maintained at [CallumMarksClik/superpowers](https://github.com/CallumMarksClik/superpowers). It's distributed under the original MIT License (see [`LICENSE`](LICENSE)) and carries independent workflow changes and additional skills on top of the upstream project. This fork is maintained separately from, and is not endorsed by, the original project.
+
 ## Table of Contents
 
 - [What This Fork Is](#what-this-fork-is)
@@ -342,6 +344,24 @@ See `CLAUDE.md` for the actual contributor guidelines (Claude Code-only scope, P
 - Skill-behaviour tests: `tests/claude-code/run-skill-tests.sh` (see `tests/claude-code/README.md`).
 - Shell lint / version-drift checks: `scripts/lint-shell.sh`, `scripts/bump-version.sh --check`.
 - Nothing in this workflow stages or commits automatically — review your own working tree (`git status` / `git diff`) before deciding what to stage, same as any other change here.
+
+### This fork's release/version workflow
+
+This fork pins the Claude Code plugin version to the repository's GitHub release/tag: `.claude-plugin/plugin.json` version = `.claude-plugin/marketplace.json` plugin version = the GitHub release/tag, always in lockstep. Versions are bumped explicitly, only for intentional releases — never automatically as part of routine development changes.
+
+To cut a release:
+
+1. Make changes
+2. Test
+3. Review the diff
+4. Bump the plugin version (`.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, and `package.json` — see `.version-bump.json` / `scripts/bump-version.sh --check`)
+5. Commit
+6. Push
+7. Create a matching GitHub release/tag (manual step — not automated by Claude Code)
+8. Run `/plugin marketplace update superpowers-dev` to refresh the available marketplace metadata
+9. Run `/plugin update superpowers@superpowers-dev` to update the installed plugin
+
+The explicit version bump in step 4 is what lets Claude Code recognise a release as newer than what's installed — bumping the tag alone without bumping `plugin.json`/`marketplace.json` (or vice versa) leaves the marketplace and the installed plugin reporting a version that doesn't match the release.
 
 ## License
 
